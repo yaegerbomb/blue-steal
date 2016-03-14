@@ -1,0 +1,23 @@
+{
+  "name": "blue-steal",
+  "version": "0.0.1",
+  "description": "Game Launcher",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaegerbomb/blue-steal.git"
+  },
+  "keywords": [
+    "Game",
+    "Launcher"
+  ],
+  "author": "David Yaeger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yaegerbomb/blue-steal/issues"
+  },
+  "homepage": "https://github.com/yaegerbomb/blue-steal"
+}
