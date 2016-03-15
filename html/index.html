@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html ng-app="LauncherApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>Hello World!</title>
+		<link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css" />
+		<style>			
+			body{
+				background-color: #07080A;
+				height: 100vh;
+				overflow-y: hidden;
+			}
+			
+			.no-pad{
+				padding:0;
+			}
+			
+			.no-marg{
+				margin: 0;
+			}
+				
+			.launch-list{
+				background-color: #222327;
+				color: #FFFFFF;
+				position: relative;
+				height: 100vh;
+				
+			}
+			
+			.games{
+				overflow-y: auto;
+				height: 75%;
+			}
+			
+			.add-game{
+				position: absolute;
+				bottom:0;
+			}
+		</style>
+	</head>
+	<body class="container-fluid" ng-controller="LauncherController">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="row">
+					<div class="launch-list">
+						<h2 class="no-pad no-marg">Games</h2>
+						<hr />
+						<div class="search">
+							<input ng-model="search" class="form-control" type="text" />
+						</div>
+						<ul class="games">
+							<li ng-repeat="file in files | filter:search">
+								<a ng-click="GetGameData(file.title)" href="#">{{file.title}}</a>
+							</li>
+						</ul>
+						<div class="add-game">
+							Add Game +
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<div style="color: #ffffff; font-weight: bold">
+						<h1>{{ActiveGame}}</h1>
+						{{gameData}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/angular/angular.min.js"></script>
+		<script>
+			const fs = require('fs');
+			const finder = require('findit');
+			const thegamesdb = require('thegamesdb');
+			
+			angular.module("LauncherApp", [])
+				.controller("LauncherController", ["$scope", function($scope){		
+					$scope.search = "";
+					
+					//assume the first exe is our game - will need to change
+					$scope.walkExe = function(dir){
+						var files = fs.readdirSync(dir);
+						for(var i = 0; i < files.length; i++){
+							if(files[i].indexOf(".exe") != -1){
+								console.log(files[i]);
+								return dir + '/' + files[i];
+							}
+						}
+					}
+					
+					$scope.ActiveGame = "";
+					$scope.GetGameData = function(gameTitle){
+						$scope.ActiveGame = gameTitle;
+						thegamesdb.getGamesList({ name: gameTitle, platform: 'PC' }).then(function(data){	
+							console.log(data);
+							var found = false;
+							for(var i = 0; i < data.length; i++){
+								if(data[i].title.indexOf(gameTitle) != -1){
+									thegamesdb.getGame({ id: data[0].id }).then(function(moreData){								
+										$scope.gameData = moreData;
+										$scope.$apply();
+									});
+									found = true;
+								}
+							}
+							if(!found){
+								$scope.gameData = "No meta data found for this game";
+								$scope.$apply();
+							}
+						}).catch(function(err){
+							console.log(err);
+						});
+					}
+					
+					
+					//get our files
+					$scope.files = [];
+					fs.readdir("D:/SteamLibrary/steamapps/common", function(err, files){
+						files.forEach(function(file){
+							$scope.files.push({
+								title: file,
+								path: $scope.walkExe("D:/SteamLibrary/steamapps/common/" + file)
+							})
+						})
+						$scope.$apply();
+					})
+					
+					
+				}])
+		</script>
+	</body>
+</html>
