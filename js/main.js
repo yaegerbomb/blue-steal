@@ -24,7 +24,7 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1300, height: 600});
 
   // and load the index.html of the app.
-  mainWindow.loadURL('file://' + __dirname + '/../html/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/../app/html/index.html');
 
 
   // Emitted when the window is closed.

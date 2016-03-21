@@ -4,34 +4,34 @@
 		<meta charset="UTF-8">
 		<title>Hello World!</title>
 		<link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css" />
-		<style>			
+		<style>
 			body{
 				background-color: #07080A;
 				height: 100vh;
 				overflow-y: hidden;
 			}
-			
+
 			.no-pad{
 				padding:0;
 			}
-			
+
 			.no-marg{
 				margin: 0;
 			}
-				
+
 			.launch-list{
 				background-color: #222327;
 				color: #FFFFFF;
 				position: relative;
 				height: 100vh;
-				
+
 			}
-			
+
 			.games{
 				overflow-y: auto;
 				height: 75%;
 			}
-			
+
 			.add-game{
 				position: absolute;
 				bottom:0;
@@ -73,11 +73,11 @@
 			const fs = require('fs');
 			const finder = require('findit');
 			const thegamesdb = require('thegamesdb');
-			
+
 			angular.module("LauncherApp", [])
-				.controller("LauncherController", ["$scope", function($scope){		
+				.controller("LauncherController", ["$scope", function($scope){
 					$scope.search = "";
-					
+
 					//assume the first exe is our game - will need to change
 					$scope.walkExe = function(dir){
 						var files = fs.readdirSync(dir);
@@ -88,16 +88,16 @@
 							}
 						}
 					}
-					
+
 					$scope.ActiveGame = "";
 					$scope.GetGameData = function(gameTitle){
 						$scope.ActiveGame = gameTitle;
-						thegamesdb.getGamesList({ name: gameTitle, platform: 'PC' }).then(function(data){	
+						thegamesdb.getGamesList({ name: gameTitle, platform: 'PC' }).then(function(data){
 							console.log(data);
 							var found = false;
 							for(var i = 0; i < data.length; i++){
 								if(data[i].title.indexOf(gameTitle) != -1){
-									thegamesdb.getGame({ id: data[0].id }).then(function(moreData){								
+									thegamesdb.getGame({ id: data[0].id }).then(function(moreData){
 										$scope.gameData = moreData;
 										$scope.$apply();
 									});
@@ -112,8 +112,8 @@
 							console.log(err);
 						});
 					}
-					
-					
+
+
 					//get our files
 					$scope.files = [];
 					fs.readdir("D:/SteamLibrary/steamapps/common", function(err, files){
@@ -125,8 +125,8 @@
 						})
 						$scope.$apply();
 					})
-					
-					
+
+
 				}])
 		</script>
 	</body>
