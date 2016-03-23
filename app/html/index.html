@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="LauncherApp">
+<html data-ng-app="gl" ng-strict-di>
 	<head>
 		<meta charset="UTF-8">
 		<title>Hello World!</title>
@@ -38,7 +38,7 @@
 			}
 		</style>
 	</head>
-	<body class="container-fluid" ng-controller="LauncherController">
+	<body class="container-fluid">
 		<div class="row">
 			<div class="col-md-3">
 				<div class="row">
@@ -68,66 +68,15 @@
 				</div>
 			</div>
 		</div>
-		<script src="../js/angular/angular.min.js"></script>
-		<script>
-			const fs = require('fs');
-			const finder = require('findit');
-			const thegamesdb = require('thegamesdb');
+		<script src="../js/angular/angular.js"></script>
 
-			angular.module("LauncherApp", [])
-				.controller("LauncherController", ["$scope", function($scope){
-					$scope.search = "";
+		<!-- services -->
+		<script src="../services/game-list.service.js"></script>
 
-					//assume the first exe is our game - will need to change
-					$scope.walkExe = function(dir){
-						var files = fs.readdirSync(dir);
-						for(var i = 0; i < files.length; i++){
-							if(files[i].indexOf(".exe") != -1){
-								console.log(files[i]);
-								return dir + '/' + files[i];
-							}
-						}
-					}
+		<script src="../gl.js"></script>
 
-					$scope.ActiveGame = "";
-					$scope.GetGameData = function(gameTitle){
-						$scope.ActiveGame = gameTitle;
-						thegamesdb.getGamesList({ name: gameTitle, platform: 'PC' }).then(function(data){
-							console.log(data);
-							var found = false;
-							for(var i = 0; i < data.length; i++){
-								if(data[i].title.indexOf(gameTitle) != -1){
-									thegamesdb.getGame({ id: data[0].id }).then(function(moreData){
-										$scope.gameData = moreData;
-										$scope.$apply();
-									});
-									found = true;
-								}
-							}
-							if(!found){
-								$scope.gameData = "No meta data found for this game";
-								$scope.$apply();
-							}
-						}).catch(function(err){
-							console.log(err);
-						});
-					}
+		<!-- core module -->
+		<!--<script src="../components/game-list.directive.js"></script>-->
 
-
-					//get our files
-					$scope.files = [];
-					fs.readdir("D:/SteamLibrary/steamapps/common", function(err, files){
-						files.forEach(function(file){
-							$scope.files.push({
-								title: file,
-								path: $scope.walkExe("D:/SteamLibrary/steamapps/common/" + file)
-							})
-						})
-						$scope.$apply();
-					})
-
-
-				}])
-		</script>
 	</body>
 </html>

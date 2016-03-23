@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "findit": "^2.0.0",
+    "pouchdb": "^5.3.1",
     "thegamesdb": "^0.1.2"
   }
 }
