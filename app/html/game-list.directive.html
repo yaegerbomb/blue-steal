@@ -1,0 +1,15 @@
+<div class="launch-list">
+  <h2 class="no-pad no-marg">Games</h2>
+  <hr />
+  <div class="search">
+    <input ng-model="search" class="form-control" type="text" />
+  </div>
+  <ul class="games">
+    <li ng-repeat="file in vm.gamesList | filter:search">
+      <a ng-click="GetGameData(file.title)" href="#">{{file.title}}</a>
+    </li>
+  </ul>
+  <div class="add-game">
+    Add Game +
+  </div>
+</div>
